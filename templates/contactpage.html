@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawSumm - Legal Summarizer</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    
+</head>
+<body>
+    <style>
+          body, html {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        color: white;
+        text-align: center;
+        background-color: black;
+    }
+
+    /* Navbar */
+    .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 15px;
+    background: rgba(0, 0, 0, 0.3); /* Slight transparency */
+    position: fixed;
+    width: 98%;
+    top: 0;
+    transition: top 0.3s ease-in-out; /* Smooth animation */
+    z-index: 1000;
+}
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background: #1e1e1e;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 200px;
+        text-align: left;
+        padding: 20px;
+        border-radius: 5px;
+        z-index: 999; /* Ensure it's clickable */
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    /* Fix Hamburger Menu Visibility */
+    .menu-toggle {
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        z-index: 1000; /* Ensure it's clickable */
+    }
+}
+
+
+    .logo {
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        color: white;
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    .logo img {
+        height: 70px;
+        width: auto;
+        margin-right: auto;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: inline;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: white;
+        font-size: 20px;
+        padding: 13px;
+        transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+        color: #d4a373;
+    }
+
+    .auth-buttons {
+        display: inline-block;
+        gap: 10px;
+    }
+
+    .btn {
+        background: none;
+        border: 2px solid #d4a373;
+        padding: 12px 23px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 30px;
+        transition: 0.4s;
+        text-decoration: none;
+    }
+
+    .signup {
+        background-color: transparent;
+        border-color: #d4a373;
+        color: white;
+    }
+
+    .signup:hover, .login:hover {
+        background-color: #d4a373;
+        color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+        height: 100vh;
+        min-height: 70vh;
+        background: url("{{ url_for('static', filename='supreme.jpg') }}") no-repeat center center/cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-attachment: fixed;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-content {
+        background:transparent;
+        padding: 30px;
+        border-radius: 10px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero h1 {
+        font-size: 55px;
+        color: white;
+    }
+
+    .highlight {
+        color: #d4a373;
+        font-style: italic;
+    }
+
+    .contact-section {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 80px;
+    background-color: #1a1a1a;
+}
+
+/* Contact Info */
+.contact-info {
+    flex: 1;
+    padding-right: 40px;
+}
+
+.contact-info h3 {
+    font-size: 55px;
+    color: #d4a373;
+}
+
+.contact-info h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.contact-info em {
+    font-style: italic;
+    color: #d4a373;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+
+.info-item i {
+    font-size: 30px;
+    color: #d4a373;
+    margin-right: 15px;
+    border-radius: 10px;
+}
+
+.info-item h4 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.info-item p {
+    font-size: 18px;
+    margin: 0;
+    color: #bbb;
+}
+
+/* Contact Form */
+.contact-form {
+    flex: 1;
+    background-color: #111;
+    padding: 40px;
+    border-radius: 8px;
+}
+
+.contact-form h2 {
+    font-size: 35px;
+}
+
+.contact-form em {
+    color: #d4a373;
+}
+
+form input,
+form textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #444;
+    background-color: #222;
+    color: white;
+    border-radius: 5px;
+}
+
+form textarea {
+    height: 120px;
+}
+
+.send-btn {
+    background-color: transparent;
+    border: 2px solid #d4a373;
+    padding: 12px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: 0.3s;
+    background-color: black;
+    color: white;
+}
+
+.send-btn:hover {
+    background-color: #d4a373;
+    color: white;
+}
+.footer {
+    background-color: black;
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align all items */
+}
+
+.footer-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between logo and text */
+}
+
+.footer-logo img {
+    width: 70px;
+}
+
+.footer-logo h2 {
+    font-size: 25px;
+    color: white;
+    margin: 0;
+}
+
+/* Social icons centered below the logo and text */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    justify-content: left;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 23px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #c09b75;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    max-width: 600px;
+}
+
+.footer-column {
+    margin-right: 20px;
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.footer-column a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.footer-column a:hover {
+    color: #d4a373;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+    background: black;
+    margin-top: 1px;
+}
+
+.footer-bottom a {
+    text-decoration: none;
+    color: white;
+    margin-left: 10px;
+}
+.contact-list li {
+    font-size: 14px;
+    display: flex;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: rgba(0, 0, 0, 0.8);
+        width: 100%;
+        text-align: center;
+    }
+    .nav-links.show {
+        display: flex;
+    }
+}
+@media (max-width: 768px) {
+    .auth-buttons {
+        flex-direction: row; /* Stack buttons on smaller screens */
+        gap: 5px;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 28px;
+    }
+}
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .hero h1 {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    
+
+    .contact-section {
+        flex-direction: column;
+        padding: 40px;
+    }
+
+    .contact-info {
+        text-align: center;
+        padding-right: 0;
+        margin-bottom: 20px;
+    }
+
+    
+}
+@media (max-width: 1024px) {
+    .contact-section {
+        flex-direction: column;
+        padding: 40px;
+    }
+
+    .contact-info, .contact-form {
+        width: 100%;
+        text-align: center;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column; /* Stack items vertically */
+        text-align: center;
+        padding: 30px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-column {
+        margin-bottom: 20px;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        font-size: 12px;
+    }
+}
+
+
+    </style>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Lawsumm logo">
+                <strong>LawSumm</strong>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}" class="active">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('summarization') }}">Summarization</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="{{ url_for('login') }}" class="btn login">LogIn</a>
+    <a href="{{ url_for('signup') }}" class="btn signup">SignUp</a>
+            </div>
+            <div class="menu-toggle">&#9776;</div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Contact <br><span class="highlight" style="color: black;">Us</span></h1>
+           
+        </div>
+    </section>
+    <section class="contact-section">
+        <div class="contact-info">
+            
+            <h1>Do you need help? <br> <em>Contact with us now!</em></h1>
+            
+            <div class="info-item">
+                <i class="fa-solid fa-map-marker-alt"></i>
+                <div>
+                    
+                    <p>0665 UET Taxila Pakistan</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <i class="fa-solid fa-phone"></i>
+                <div>
+                    
+                    <p>+92 337 55498762</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                    
+                    <p>legaldocumentai@gmail.com</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form">
+            <h2>Contact with us <em>now!</em></h2>
+            <form id="contactForm">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="email" id="email" placeholder="E-mail Address" required>
+                <textarea id="message" placeholder="Message" required></textarea>
+                <button type="submit" class="send-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-logo">
+            <div class="footer-logo-container">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Lawsumm logo">
+                <h2>LawSumm</h2>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#"><i class="fa-brands fa-discord"></i></a>
+            </div>
+        </div>
+        <div class="footer-links">
+            <div class="footer-column">
+                <h3>About</h3>
+                <a href="{{ url_for('about') }}">Why Lawsumm</a>
+                <a href="{{ url_for('home') }}">Legal Library</a>
+                <a href="{{ url_for('about') }}">Team</a>
+                <a href="{{ url_for('home') }}">FAQs</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Product</h3>
+                <a href="{{ url_for('summarization') }}">summarizer</a>
+                <a href="{{ url_for('summarization') }}">Legal Chatbot</a>
+                <a href="Terms and Conditions.pdf">Privacy Policy</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Get Started</h3>
+                <a href="{{ url_for('login') }}">LogIn</a>
+                <a href="{{ url_for('signup') }}">SignUp</a>
+                <a href="{{ url_for('contact') }}">Contact Us</a>
+                
+            </div>
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <p style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-envelope"></i>
+                    <a href="mailto:legaldocumentai@gmail.com">
+                        legaldocumentai@gmail.com
+                    </a>
+                </p>
+                <p style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-phone"></i>
+                    
+                    +92 337 55498762
+                </p>
+            </div>
+
+            
+
+        </div>
+    </footer>
+
+    <div class="footer-bottom">
+        © 2025 LawSumm by OthersideAI. All rights reserved.
+        <a href="{{ url_for('serve_pdf', filename='Terms and Conditions.pdf') }}" target="_blank">
+            Privacy Policy
+        </a> 
+        |
+        <a href="{{ url_for('serve_pdf', filename='Terms and Conditions.pdf') }}" target="_blank">
+            Terms
+        </a>
+        
+    </div>
+
+</body>
+</html>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    menuToggle.addEventListener("click", function () {
+        navLinks.classList.toggle("show");
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
+            navLinks.classList.remove("show");
+        }
+    });
+});
+
+    function redirectToLogin() {
+        window.location.href = "loginpage.html"; // Redirects to the login page
+    }
+
+    function redirectToSignup() {
+        window.location.href = "signuppage.html"; // Redirects to the signup page
+    }
+   
+    let lastScrollTop = 0;
+    const navbar = document.querySelector(".navbar");
+
+    window.addEventListener("scroll", function () {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (currentScroll > lastScrollTop) {
+            // Scrolling down - hide navbar
+            navbar.style.top = "-80px";
+        } else {
+            // Scrolling up - show navbar
+            navbar.style.top = "0";
+        }
+        
+        lastScrollTop = currentScroll;
+    });
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form from refreshing
+
+    let name = document.getElementById('name').value;
+    let email = document.getElementById('email').value;
+    let message = document.getElementById('message').value;
+
+    if (name && email && message) {
+        alert("Thank you, " + name + "! Your message has been sent successfully.");
+        document.getElementById('contactForm').reset(); // Clear form after submission
+    } else {
+        alert("Please fill in all fields.");
+    }
+});
+
+</script>

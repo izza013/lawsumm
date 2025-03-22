@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <style>
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url("{{ url_for('static', filename='pic7.jpg') }}") no-repeat center center/cover;
+            color: white;
+        }
+
+        .container {
+            background-color: black;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            
+            
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .login-card {
+            background: black;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 360px;
+        }
+
+        .logo img {
+            width: 150px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: white;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+           margin-top: 5px;
+            width: 100%;
+            margin-bottom: 5px;
+
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+          white-space: nowrap;
+
+            
+        }
+        .custom-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff; /* Text color */
+    gap: 8px;
+    
+
+}
+
+/* Hide default checkbox */
+.custom-checkbox input {
+    display: none;
+}
+
+/* Custom checkbox design */
+.checkmark {
+    width: 18px;
+    height: 18px;
+    left: 5px;
+    background-color: transparent;
+    border: 2px solid #d4a373; /* Border color */
+    border-radius: 5px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Checkmark effect */
+.custom-checkbox input:checked + .checkmark {
+    background-color: #d4a373; /* Checked background */
+    border-color: #d4a373;
+}
+
+.custom-checkbox input:checked + .checkmark::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+ 
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #d4a373;
+            border: none;
+            border-radius: 5px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background-color: black;
+            border: 1px solid  #d4a373
+        }
+        
+        button:disabled {
+            background-color:#d4a373 ;
+            cursor: not-allowed;
+        }
+        .login-link {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .login-link a {
+            color: #d4a373;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Lawsumm logo">
+                </div>
+
+        <h2>LawSumm</h2>
+        <h2>Create an Account</h2>
+        <form id="signupForm">
+            <input type="text" id="firstName" placeholder="First Name" required>
+            <input type="text" id="lastName" placeholder="Last Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <div class="options">
+            <label class="custom-checkbox">
+                <input type="checkbox" id="rememberMe">
+                <span class="checkmark"></span>
+                Remember me
+            </label>
+        </div>
+            <button id="signupButton" type="submit" >Sign Up</button>
+        </form>
+
+        <!-- Login link -->
+        <div class="login-link">
+            Already have an account? <a href="{{ url_for('login') }}">Login</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleButton() {
+            const firstName = document.getElementById("firstName").value.trim();
+            const lastName = document.getElementById("lastName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const termsChecked = document.getElementById("termsCheckbox").checked;
+            const signupButton = document.getElementById("signupButton");
+
+            if (firstName && lastName && email && password && termsChecked) {
+                signupButton.disabled = false;
+            } else {
+                signupButton.disabled = true;
+            }
+        }
+
+        document.getElementById("signupForm").addEventListener("input", toggleButton);
+        document.getElementById("signupForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            if (document.getElementById("signupButton").disabled) {
+                return
+            }
+            window.location.href = "{{ url_for('login') }}";
+        });
+    </script>
+</body>
+</html>

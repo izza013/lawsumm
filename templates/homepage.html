@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawSumm - Legal Summarizer</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</head>
+<style>
+    /* Global Styles */
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        color: white;
+        text-align: center;
+        background-color: black;
+    }
+
+    /* Navbar */
+    .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 15px;
+    background: rgba(0, 0, 0, 0.3); /* Slight transparency */
+    position: fixed;
+    width: 98%;
+    top: 0;
+    transition: top 0.3s ease-in-out; /* Smooth animation */
+    z-index: 1000;
+}
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background: #1e1e1e;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 200px;
+        text-align: left;
+        padding: 20px;
+        border-radius: 5px;
+        z-index: 999; /* Ensure it's clickable */
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    /* Fix Hamburger Menu Visibility */
+    .menu-toggle {
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        z-index: 1000; /* Ensure it's clickable */
+    }
+}
+
+
+
+
+    .logo {
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        color: white;
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    .logo img {
+        height: 70px;
+        width: auto;
+        margin-right: auto;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: inline;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: white;
+        font-size: 20px;
+        padding: 13px;
+        transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+        color: #d4a373;
+    }
+
+    .auth-buttons {
+        display: inline-block;
+        gap: 10px;
+        
+    }
+
+    .btn {
+        background: none;
+        border: 2px solid #d4a373;
+        padding: 12px 23px;
+        margin: auto;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 30px;
+        transition: 0.4s;
+        text-decoration: none;
+    }
+
+    .signup {
+        
+        border-color: #d4a373;
+        color: white;
+    }
+
+    .signup:hover, .login:hover {
+        background-color: #d4a373;
+        color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+        height: 100vh;
+        min-height: 70vh;
+        background: url("{{ url_for('static', filename='supreme.jpg') }}") no-repeat center center/cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        
+        background-attachment: fixed;
+        position: relative;
+        z-index: 1;
+       
+    }
+
+    .hero-content {
+        background:transparent;
+        padding: 30px;
+        border-radius: 10px;
+        position: relative;
+        z-index: 2;
+        color:black;
+    }
+
+    .hero h1 {
+        font-size: 55px;
+        color: white;
+    }
+
+    .highlight {
+        color:black;
+        font-style: italic;
+    }
+
+    .try-summarizer {
+        background-color: transparent;
+        border: 2px solid #d4a373;
+        padding: 15px 27px;
+        font-size: 18px;
+        color:white;
+        cursor: pointer;
+        border-radius: 30px;
+        transition: 0.3s;
+        margin-top: 10px;
+        
+    }
+
+    .try-summarizer:hover {
+        background-color:#d4a373;
+        
+        border-color:#d4a373;
+    }
+    .about-section {
+   
+    align-items: left;
+    
+    flex-wrap: wrap;
+justify-content: center;
+    background-color: #1a1a1a; /* Dark background */
+    color: white;
+    padding: 80px;
+    margin-bottom: 10px;
+}
+
+.about-text {
+    flex: 1; /* Takes 50% width */
+    padding-right: 30px;
+    text-align: left;
+    color: white;
+    font-size: 19px;
+    margin-bottom: 50px;
+    
+}
+
+.about-text h1 {
+    font-size: 50px;
+    color: white;
+}
+.about-text h3{
+    font-size: 65px;
+}
+
+.about-text em {
+    font-style: italic;
+    color: #c49a6c;
+    font-size: 45px; /* Highlighted text */
+}
+
+
+
+.discover-btn {
+    background-color: transparent;
+        border: 2px solid #d4a373;
+        padding: 17px 28px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 30px;
+        transition: 0.3s;
+        background-color: black;
+        color: white;
+        margin-top: 700px;
+        
+}
+
+.discover-btn:hover {
+        background-color:#d4a373;
+        color: white;
+        border-color:#d4a373;
+    }
+    .button-container {
+    margin-top: 50px; /* Moves the button further down */
+}
+
+.about-image {
+    flex: 1; /* Takes 50% width */
+    text-align: right;
+}
+
+.about-image img {
+    width: 100%;
+    max-width: 500px;
+    height: 600px;
+    border-radius: 2px;
+}
+.services-section {
+    background-color: #0D0D0D; /* Dark background */
+    text-align: center;
+    padding: 10px;
+}
+
+/* Services Heading */
+.services-heading {
+    font-size: 40px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 30px; /* Space between heading and features */
+}
+.features {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0D0D0D; /* Dark background */
+    padding: 50px 10%;
+    text-align: center;
+}
+
+.feature {
+    flex: 1;
+    max-width: 30%;
+    color: white;
+    transition: transform 0.3s ease-in-out;
+}
+.feature:hover {
+    transform: translateY(-5px);
+}
+
+.feature img {
+    width: 60px; /* Adjust icon size */
+    margin-bottom: 15px;
+}
+
+.feature h3 {
+    font-size: 1.7rem;
+    font-weight: bold;
+}
+
+.feature p {
+    font-size: 1.2rem;
+    color: #aaa; /* Light gray text */
+    line-height: 1.5;
+}
+/* Video section container */
+.video-section {
+            position: relative;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        /* Video thumbnail styling */
+        .video-container {
+            position: relative;
+            width: 100%;
+            margin: auto;
+            cursor: pointer;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .video-container:hover .video-thumbnail {
+            transform: scale(1.05);
+        }
+
+        /* Play button styling */
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .play-button:hover {
+            background:#d4a373;
+        }
+
+        /* Modal styling */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-content {
+            position: relative;
+            width: 670px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Close button */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: white;
+        }
+        .legal-practice {
+        background: #121212;
+        color: white;
+        padding: 50px 0;
+        text-align: center;
+    }
+    .container {
+        max-width: 900px;
+        max-height: 1200px;
+        margin: auto;
+        padding: 0 200px;
+    }
+    .section-header h2 {
+        font-size: 50px;
+        color: #fff;
+    }
+    .section-header h3{
+        font-size: 65px;
+    }
+    .section-header span {
+        color: #c69c6d;
+    }
+    .section-header p {
+        color: #aaa;
+        margin-bottom: 30px;
+    }
+    .practice-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .practice-card {
+        background: #1e1e1e;
+        padding: 90px 50px;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.3s, background 0.3s;
+        cursor: pointer;
+    }
+    .practice-card i {
+        font-size: 40px;
+        color: #d4a373;
+        margin-bottom: 10px;
+        display: block;
+    }
+    .practice-card h3 {
+        font-size: 20px;
+        margin: 0;
+    }
+    .practice-card:hover {
+        transform: translateY(-5px);
+        background: #d4a373;
+        color: #fff;
+    }
+    .practice-card:hover i {
+        color: #fff;
+    }
+    .law-link {
+    text-decoration: none; /* Removes underline */
+    color: inherit; /* Uses the default text color */
+    font-weight: bold;
+}
+
+.law-link:hover {
+    color: white; /* Adds hover effect */
+}
+.testimonials {
+            max-width: 1000px;
+            margin: auto;
+            padding: 50px 20px;
+        }
+
+        .section-header {
+            font-size: 24px;
+            color: #d4a373;
+            text-align: center;
+            
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .testimonials {
+            max-width: 1000px;
+            margin: auto;
+            padding: 50px 20px;
+        }
+
+        .section-header {
+            font-size: 24px;
+            color: #d4a373;
+           
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        /* Scrollable Container */
+        .scroll-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: #d4a373 #1a1818;
+            scroll-snap-type: x mandatory;
+        }
+
+        /* Scrollbar Customization */
+        .scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background-color: #d4a373;
+            border-radius: 10px;
+        }
+
+        .scroll-container::-webkit-scrollbar-track {
+            background: #1a1818;
+        }
+
+        .reviews-section {
+            max-width: 900px;
+            margin: 50px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reviews-section h2{
+            font-size: 55px;
+        }
+        
+        .review-card {
+            min-width: 200px;
+            background: #1e1e1e;
+            padding: 50px 70px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .review-card:hover {
+            transform: scale(1.05);
+        }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .reviewer img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .arrows {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transform: translateY(-50%);
+        }
+
+        .arrow {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: background 0.3s;
+        }
+
+        .arrow:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        .law-firm-section {
+    background-color: #0d0b09; /* Dark background */
+    padding: 50px 0;
+    text-align: center;
+}
+
+.law-firm-section h1 {
+    font-size: 55px;
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.law-firm-section h1 span {
+    
+    color: #c79c68; /* Gold accent */
+}
+
+/* Attorney Wrapper */
+.attorney-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Individual Lawyer Profile */
+.lawyer-profile {
+    background-color: #1a1816; /* Slightly lighter than background */
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    width: 250px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.lawyer-profile:hover {
+    transform: translateY(-5px);
+}
+
+/* Lawyer Images */
+.lawyer-profile img {
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+}
+
+/* Profile Overlay */
+.profile-overlay {
+    position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+}
+
+.lawyer-profile:hover .profile-overlay {
+    opacity: 1;
+}
+
+/* Social Media Icons */
+.profile-overlay a {
+            color: white;
+            font-size: 20px;
+            margin: 10px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        .profile-overlay a:hover {
+            transform: scale(1.2);
+            color: #d4a373;
+        }
+
+
+/* Attorney Name */
+.attorney-name {
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    margin-top: 15px;
+}
+
+/* Attorney Role */
+.attorney-role {
+    font-size: 18px;
+    color: #c0b7a8; /* Soft gold */
+    margin-top: 5px;
+}
+
+        .faq-container {
+            max-width: 800px;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 55px;
+            font-weight: bold;
+        }
+
+        .faq-item {
+            background: #d4a373;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .faq-answer {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 15px;
+        }
+
+        .faq-icon {
+            font-size: 25px;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+        .banner {
+            width: 100%;
+            height: 90vh;
+            background: url("{{ url_for('static', filename='pic7.jpg') }}") no-repeat center center/cover;
+            background-attachment: fixed; /* Keeps background fixed while text moves */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .banner-content {
+            font-size: 2.3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+            width: 80%;
+        }
+
+        .highlight {
+            font-style: italic;
+            color: #c09b75;
+        }
+
+        /* Extra content to enable scrolling */
+        .content {
+            height: 150vh;
+            background: black;
+            display: flex;
+            align-items: left;
+            justify-content:left;
+            font-size: 1.5rem;
+            padding: 50px;
+            padding-bottom: 70px;
+            text-align: left;
+        }
+       /* Footer Container */
+       .footer {
+    background-color: black;
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align all items */
+}
+
+.footer-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between logo and text */
+}
+
+.footer-logo img {
+    width: 70px;
+}
+
+.footer-logo h2 {
+    font-size: 25px;
+    color: white;
+    margin: 0;
+}
+
+/* Social icons centered below the logo and text */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    justify-content: left;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 23px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #c09b75;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    max-width: 600px;
+}
+
+.footer-column {
+    margin-right: 20px;
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.footer-column a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.footer-column a:hover {
+    color: #d4a373;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+    background: black;
+    margin-top: 1px;
+}
+
+.footer-bottom a {
+    text-decoration: none;
+    color: white;
+    margin-left: 10px;
+}
+.contact-list li {
+    font-size: 14px;
+    display: flex;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column; /* Stack items vertically */
+        text-align: center;
+        padding: 30px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-column {
+        margin-bottom: 20px;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        font-size: 12px;
+    }
+}
+
+/* Mobile Devices (up to 600px) */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: rgba(0, 0, 0, 0.8);
+        width: 100%;
+        text-align: center;
+    }
+    .nav-links.show {
+        display: flex;
+    }
+
+
+
+    .about-section {
+        flex-direction: column;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .about-text {
+        padding-right: 0;
+        text-align: center;
+    }
+
+    .about-image img {
+        max-width: 90%;
+        height: auto;
+        padding-top: 10px;
+        padding-right: 10px;
+    }
+
+    .features {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .practice-grid {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 600px) {
+    .btn, .discover-btn, .try-summarizer {
+        width: 30%;
+        font-size: 14px;
+        padding: 12px ;
+        
+    }
+}
+@media (max-width: 768px) {
+    .auth-buttons {
+        flex-direction: row; /* Stack buttons on smaller screens */
+        gap: 5px;
+        width: 100%;
+        text-align: center;
+    }
+
+   
+}
+
+/* Tablets (601px - 1024px) */
+
+
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 50px; /* Reduce padding on smaller screens */
+    }
+
+    .section-header h2 {
+        font-size: 32px;
+    }
+
+    .section-header h3 {
+        font-size: 40px;
+    }
+
+    .practice-card {
+        padding: 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 30px;
+    }
+
+    .section-header h2 {
+        font-size: 28px;
+    }
+
+    .section-header h3 {
+        font-size: 35px;
+    }
+
+    .practice-card {
+        padding: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    .section-header h2 {
+        font-size: 24px;
+    }
+
+    .section-header h3 {
+        font-size: 30px;
+    }
+
+    .practice-card {
+        padding: 30px;
+    }
+}
+/* Larger Screens (Above 1024px) */
+@media (min-width: 1025px) {
+    .navbar {
+        width: 98%;
+    }
+
+    .about-section {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .about-image img {
+        max-width: 500px;
+    }
+}
+@media (max-width: 1024px) {
+    .section-header h2 {
+        font-size: 32px;
+    }
+
+    .reviews-section h2 {
+        font-size: 36px;
+    }
+
+    .review-card {
+        min-width: 220px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-header h2 {
+        font-size: 28px;
+    }
+
+    .reviews-section h2 {
+        font-size: 32px;
+    }
+
+    .review-card {
+        min-width: 200px;
+        padding: 25px;
+    }
+
+    .reviewer img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .arrow {
+        padding: 8px 12px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-header h2 {
+        font-size: 24px;
+    }
+
+    .reviews-section h2 {
+        font-size: 28px;
+    }
+
+    .scroll-container {
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    .review-card {
+        width: 30%;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .reviewer img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .arrow {
+        padding: 6px 10px;
+        font-size: 16px;
+    }
+}
+</style>
+
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Lawsumm logo">
+                <strong>LawSumm</strong>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}" class="active">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('summarization') }}">Summarization</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="{{ url_for('login') }}" class="btn login">LogIn</a>
+    <a href="{{ url_for('signup') }}" class="btn signup">SignUp</a>
+            </div>
+            <div class="menu-toggle">&#9776;</div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Summarizing Law  <br><span class="highlight" style="color: black;">Simplifying Justice</span></h1>
+            
+            <a href="{{ url_for('summarization') }}" class="btn try-summarizer">Try Summarizer</a>
+        </div>
+    </section>
+    <div class="services-section">
+        
+    <div class="about-section">
+        <div class="about-text">
+            <h3>About Us</h3>
+            <h1>We are here to simplify <br> <em>legal complexities</em></h1>
+            <p>We are here to simplify legal complexities and make justice more accessible. Our AI-powered platform transforms lengthy legal documents into clear, concise, and accurate summaries, saving time and effort. With fast and reliable processing, we help legal professionals, researchers, and individuals quickly understand critical case details. Our innovative technology ensures precision and clarity, empowering users with instant legal insights.</p>
+            <div class="button-container">
+                <a href="{{ url_for('about') }}" class="btn discover-btn">Learn more</a>
+            </div>
+        </div>
+        <div class="about-image">
+            <img src="{{ url_for('static', filename='pic4.jpg') }}" alt="Law Firm Team">
+           
+        </div>
+    </div>
+    <section class="features">
+        
+        <div class="feature">
+            <img src="{{ url_for('static', filename='gavelicon.png') }}" alt="Legal Production">
+            <h3>AI based Legal Summarizer</h3>
+            <p>AI-powered legal summarizer for transforming complex legal texts<br>into concise, actionable insights. </p>
+        </div>
+        <div class="feature">
+            <img src="{{ url_for('static', filename='chatboticon.png') }}" alt="Private">
+            <h3>Legal Chatbot</h3>
+            <p>AI-powered legal assistance for precise responses to legal inquires.</p>
+        </div>
+        <div class="feature">
+            <img src="{{ url_for('static', filename='bookmark.png') }}" alt="Winning Awards">
+            <h3>Key Highlighting </h3>
+            <p>Essential points highlighting for easy access to legal references.</p>
+        </div>
+    </section>
+    <div class="video-section">
+        <div class="video-container" onclick="playVideo()">
+            <img src="{{ url_for('static', filename='pic12.jpg') }}" alt="Law Firm Promo" class="video-thumbnail">
+            <div class="play-button">
+                <i class="fa fa-play"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-content">
+            <span class="close" onclick="closeVideo()">&times;</span>
+            <iframe id="videoFrame" width="670" height="377" 
+                src="https://www.youtube.com/embed/rFygb2YoQ0A?enablejsapi=1" 
+                title="justice and law concept on wooden background" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <section class="legal-practice">
+        <div class="container">
+            <div class="section-header">
+                <h3>Legal Library</h3>
+                <h2>General & Legal <span>Laws</span></h2>
+                <p>Your gateway to all publicly available law books of Pakistan, covering General & Legal Laws.</p>
+            </div>
+            <div class="practice-grid">
+                <div class="practice-card">
+                    <i class="fa-solid fa-building-columns" ></i>
+                    <h3>
+                        <a href="{{ url_for('serve_pdf', filename='pakistan penal code.pdf') }}" target="_blank" class="law-link">
+                            Pakistan Penal Code
+                        </a>
+                    </h3>
+                </div>
+                <div class="practice-card">
+                    <i class="fa-solid fa-handcuffs"></i>
+                    <h3>
+                    <a href="{{ url_for('serve_pdf', filename='code of criminal procedure.pdf') }}" target="_blank" class="law-link">
+                        Code of Criminal Procedure
+                    </a>
+                </h3>
+                </div>
+                <div class="practice-card">
+                    <i class="fa fa-user-injured"></i>
+                    <h3>
+                    <a href="{{ url_for('serve_pdf', filename='code of civil procedure.pdf') }}" target="_blank" class="law-link">
+                        Code of Civil Procedure
+                    </a>
+                </h3>
+                   
+                </div>
+                <div class="practice-card">
+                    <i class="fa fa-balance-scale"></i>
+                    <h3>
+                    <a href="{{ url_for('serve_pdf', filename='constitution of pakistan.pdf') }}" target="_blank" class="law-link">
+                        Constitution of Pakistan
+                    </a>
+                </h3>
+                </div>
+                <div class="practice-card">
+                    <i class="fa fa-briefcase"></i>
+                    <h3>
+                    <a href="{{ url_for('serve_pdf', filename='rules of business.pdf') }}" target="_blank" class="law-link">
+                        Rules of Business
+                    </a>
+                </h3>
+                </div>
+                <div class="practice-card">
+                    <i class="fa fa-gavel"></i>
+                    <h3>
+
+                    
+                    <a href="{{ url_for('serve_pdf', filename='estacode.pdf') }}" target="_blank" class="law-link">
+                        Estacode
+                    </a>
+                </h3>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="reviews-section">
+        <h2>What Our <span style="color: #d4a373;">Customers Say?</span></h2>
+        
+        
+
+        <div class="scroll-container">
+            <div class="review-card">
+                <p>"I use this summarizer to quickly get key points from court rulings. It's fast and reliable."</p>
+                <div class="reviewer">
+                    <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Reviewer">
+                    <div>
+                        <strong>Hassan Raza, Paralegal</strong>
+                        <p>★★★★★</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p>"This tool is a lifesaver for students like me. It helps me quickly understand judgments without reading hundreds of pages."</p>
+                <div class="reviewer">
+                    <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Reviewer">
+                    <div>
+                        <strong>Ayesha Khan, Law Student</strong>
+                        <p>★★★★★</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p>"As a lawyer, This summarizer has significantly reduced my workload by providing precise and concise case summaries in seconds"</p>
+                <div class="reviewer">
+                    <img src="https://randomuser.me/api/portraits/women/3.jpg" alt="Reviewer">
+                    <div>
+                        <strong>Sarah Ahmed, Advocate</strong>
+                        <p>★★★★☆</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <p>"The AI-generated summaries are highly accurate and well-structured. It saves me hours of reading and helps me focus on case strategies."</p>
+                <div class="reviewer">
+                    <img src="https://randomuser.me/api/portraits/men/4.jpg" alt="Reviewer">
+                    <div>
+                        <strong>Omar Siddiqui, Legal Consultant
+
+                        </strong>
+                        <p>★★★★★</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </section>
+    <section class="law-firm-section">
+        <h1>Meet Our <span>Team</span></h1>
+        <div class="attorney-wrapper">
+            
+
+            <div class="lawyer-profile">
+                <img src="https://images.pexels.com/photos/4427621/pexels-photo-4427621.jpeg" alt="Lawyer">
+
+                <div class="profile-overlay">
+                    <a href="https://www.linkedin.com/in/izza-shahzad-b43273267/"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/izza013"><i class="fab fa-github"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100013023002827"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <div class="attorney-name">Izza Shahzad</div>
+                <div class="attorney-role">Data Scientist</div>
+            </div>
+
+            <div class="lawyer-profile">
+                <img src="https://images.pexels.com/photos/4427621/pexels-photo-4427621.jpeg" alt="Lawyer">
+
+                <div class="profile-overlay">
+                    <a href="https://www.linkedin.com/in/ishaa-arshad-29a148302?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/ishaa-arshad"><i class="fab fa-github"></i></a>
+                    <a href="https://www.facebook.com/share/1XVBEZHqek/"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <div class="attorney-name">Ishaa Arshad</div>
+                <div class="attorney-role">Data Scientist</div>
+            </div>
+
+            <div class="lawyer-profile">
+                <img src="https://images.pexels.com/photos/4427621/pexels-photo-4427621.jpeg" alt="Lawyer">
+
+                <div class="profile-overlay">
+                    <a href="https://www.linkedin.com/in/syeda-madiha-9a5489319?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/Madiha620"><i class="fab fa-github"></i></a>
+                    <a href="https://www.facebook.com/share/1BBfgtHyhi/"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+                <div class="attorney-name">Madiha Shah</div>
+                <div class="attorney-role">Web Developer</div>
+            </div>
+        </div>
+    </section>
+    <div class="faq-container">
+        <h2>FAQ</h2>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                Is Lawsumm Legal Case Summarizer free to use?
+                <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                Yes, the basic version is free, but premium features require a subscription.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                How does the AI summarize legal cases?
+                <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                The AI extracts key legal points, rulings, and arguments from court cases.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                How does the AI summarize legal cases?
+                <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                The AI extracts key legal points, rulings, and arguments from court cases.
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                How does the AI summarize legal cases?
+                <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                The AI extracts key legal points, rulings, and arguments from court cases.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                Is the summary generated by the AI accurate?
+                <span class="faq-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                The AI aims for high accuracy but should be reviewed for legal applications.
+            </div>
+        </div>
+
+    </div>
+    <div class="banner">
+        <div class="banner-content">
+            <p>Law for all, clarity for you </p>
+            <p><span class="highlight">AI-powered summaries </span> and smart legal guidance at your service.</p>
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-logo">
+            <div class="footer-logo-container">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Lawsumm logo">
+                <h2>LawSumm</h2>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#"><i class="fa-brands fa-discord"></i></a>
+            </div>
+        </div>
+        
+        <div class="footer-links">
+            <div class="footer-column">
+                <h3>About</h3>
+                <a href="{{ url_for('about') }}">Why Lawsumm</a>
+                <a href="{{ url_for('home') }}">Legal Library</a>
+                <a href="{{ url_for('about') }}">Team</a>
+                <a href="{{ url_for('home') }}">FAQs</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Product</h3>
+                <a href="{{ url_for('summarization') }}">summarizer</a>
+                <a href="{{ url_for('summarization') }}">Legal Chatbot</a>
+                <a href="Terms and Conditions.pdf">Privacy Policy</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Get Started</h3>
+                <a href="{{ url_for('login') }}">LogIn</a>
+                <a href="{{ url_for('signup') }}">SignUp</a>
+                <a href="{{ url_for('contact') }}">Contact Us</a>
+                
+            </div>
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <p style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-envelope"></i>
+                    <a href="mailto:legaldocumentai@gmail.com">
+                        legaldocumentai@gmail.com
+                    </a>
+                </p>
+                <p style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-phone"></i>
+                    
+                    +92 337 55498762
+                </p>
+            </div>
+
+            
+
+        </div>
+    </footer>
+
+    <div class="footer-bottom">
+        © 2025 LawSumm by OthersideAI. All rights reserved.
+        | <a href="{{ url_for('serve_pdf', filename='Terms and Conditions.pdf') }}" target="_blank">
+            Privacy Policy
+        </a> 
+        |
+        <a href="{{ url_for('serve_pdf', filename='Terms and Conditions.pdf') }}" target="_blank">
+            Terms
+        </a>
+    </div>
+
+    
+</body>
+</html>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    menuToggle.addEventListener("click", function () {
+        navLinks.classList.toggle("show");
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
+            navLinks.classList.remove("show");
+        }
+    });
+});
+
+
+    function redirectToLogin() {
+        window.location.href = "loginpage.html"; // Redirects to the login page
+    }
+
+    function redirectToSignup() {
+        window.location.href = "signuppage.html"; // Redirects to the signup page
+    }
+    function redirectToaboutpage(){
+    window.location.href = "aboutpage.html";
+    }
+    function redirectTomainpage(){
+        window.location.href = "summerization-app\templates\mainscreen.html";
+    }
+   
+    let lastScrollTop = 0;
+    const navbar = document.querySelector(".navbar");
+
+    window.addEventListener("scroll", function () {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (currentScroll > lastScrollTop) {
+            // Scrolling down - hide navbar
+            navbar.style.top = "-80px";
+        } else {
+            // Scrolling up - show navbar
+            navbar.style.top = "0";
+        }
+        
+        lastScrollTop = currentScroll;
+    });
+    function playVideo() {
+    document.getElementById("videoModal").style.display = "flex";
+}
+
+function closeVideo() {
+    document.getElementById("videoModal").style.display = "none";
+    document.getElementById("videoFrame").src = document.getElementById("videoFrame").src; // Reset video
+}
+function scrollReviews(distance) {
+            document.querySelector('.scroll-container').scrollBy({ left: distance, behavior: 'smooth' });
+        }
+        document.querySelectorAll(".faq-question").forEach(question => {
+            question.addEventListener("click", () => {
+                const parent = question.parentElement;
+                parent.classList.toggle("active");
+
+                document.querySelectorAll(".faq-item").forEach(item => {
+                    if (item !== parent) {
+                        item.classList.remove("active");
+                    }
+                });
+            });
+        });
+
+</script>

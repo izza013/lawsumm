@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /*background: linear-gradient(to bottom, black, #d4a373);*/
+            background: url("{{ url_for('static', filename='pic7.jpg') }}") no-repeat center center/cover;
+            color: white;
+        }
+
+        /* Login Card */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .login-card {
+            background: black;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 360px;
+        }
+
+        /* Logo */
+        .logo img {
+            width: 100px;
+            margin-bottom: 0px;
+            width: 150px;
+        }
+
+        /* Social Login Buttons */
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 10px;
+        }
+
+        .social-btn {
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .google, .facebook {
+            background: #d4a373;
+            color: white;
+        }
+
+        .social-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .divider span {
+            flex-grow: 1;
+            background: #ccc;
+            height: 1px;
+            margin: 0 10px;
+        }
+
+        /* Form Fields */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            text-align: left;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        /* Password Input */
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #d4a373;
+        }
+
+        /* Options (Remember me + Forgot password) */
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            margin-bottom: 15px;
+            width: 100%;
+
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+          white-space: nowrap;
+
+            
+        }
+        .custom-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff; /* Text color */
+    gap: 8px;
+    white-space: nowrap;
+}
+
+/* Hide default checkbox */
+.custom-checkbox input {
+    display: none;
+}
+
+/* Custom checkbox design */
+.checkmark {
+    width: 18px;
+    height: 18px;
+    background-color: transparent;
+    border: 2px solid #d4a373; /* Border color */
+    border-radius: 5px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Checkmark effect */
+.custom-checkbox input:checked + .checkmark {
+    background-color: #d4a373; /* Checked background */
+    border-color: #d4a373;
+}
+
+.custom-checkbox input:checked + .checkmark::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+ 
+
+        
+ .options a {
+            color: #d4a373;
+            text-decoration: none;
+        }
+
+        .options a:hover {
+            text-decoration: underline;
+        }
+
+        /* Sign-in Button */
+        .sign-in-btn {
+            background-color:#d4a373;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .sign-in-btn:hover {
+            background-color: black;
+            border: 1px solid  #d4a373
+        }
+
+        /* Signup Text */
+        .signup-text {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .signup-text a {
+            color: #d4a373;
+            text-decoration: none;
+        }
+
+        .signup-text a:hover {
+            text-decoration: underline;
+        }
+        @media screen and (max-width: 600px) {
+    .login-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .social-btn {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+
+    .sign-in-btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .options {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .options a {
+        margin-top: 5px;
+    }
+}
+
+/* Medium Devices (Tablets, 768px and below) */
+@media screen and (max-width: 768px) {
+    .login-card {
+        width: 70%;
+        padding: 25px;
+    }
+}
+
+/* Large Devices (Laptops, 1024px and below) */
+@media screen and (max-width: 1024px) {
+    .login-card {
+        width: 400px;
+        padding: 30px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Lawsumm logo">
+            </div>
+            <h2>LawSumm</h2>
+            <h2>Welcome back</h2>
+            <p>Please enter your details to sign in</p>
+
+            <div class="social-login">
+                <button class="social-btn google">Google</button>
+                <button class="social-btn facebook">Facebook</button>
+            </div>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <form id="loginForm">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <span class="toggle-password" id="toggleIcon" onclick="togglePassword()">
+                        <i class="fa-solid fa-eye"></i> <!-- Default eye icon -->
+                    </span>
+                </div>
+
+                <div class="options">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                    <a href="{{ url_for('forget_password') }}" class="forgot-password">Forgot password?</a>
+
+                    
+                </div>
+
+                <button type="submit" class="sign-in-btn">Sign in</button>
+            </form>
+
+            <p class="signup-text">
+                Don't have an account? <a href="{{ url_for('signup') }}">Create account</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            const toggleIcon = document.getElementById("toggleIcon").querySelector("i");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash"); // Change to slashed eye
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye"); // Change back to normal eye
+            }
+        }
+
+        // Handle Form Submission
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (email.trim() === "" || password.trim() === "") {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            alert("Login Successful!");
+            window.location.href = "{{ url_for('home') }}";
+        });
+    </script>
+
+</body>
+</html>

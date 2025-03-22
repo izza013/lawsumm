@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawSumm - Legal Summarizer</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<style>
+  body, html {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        color: white;
+        text-align: center;
+        background-color: black;
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    /* Navbar */
+    .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 15px;
+    background: rgba(0, 0, 0, 0.3); /* Slight transparency */
+    position: fixed;
+    width: 98%;
+    top: 0;
+    transition: top 0.3s ease-in-out; /* Smooth animation */
+    z-index: 1000;
+}
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        background: #1e1e1e;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 200px;
+        text-align: left;
+        padding: 20px;
+        border-radius: 5px;
+        z-index: 999; /* Ensure it's clickable */
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    /* Fix Hamburger Menu Visibility */
+    .menu-toggle {
+        display: block;
+        font-size: 24px;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        z-index: 1000; /* Ensure it's clickable */
+    }
+}
+
+
+
+
+
+    .logo {
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        color: white;
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    .logo img {
+        height: 70px;
+        width: auto;
+        margin-right: auto;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: inline;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: white;
+        font-size: 20px;
+        padding: 13px;
+        transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+        color: #d4a373;
+    }
+
+    .auth-buttons {
+        display: inline-block;
+        gap: 10px;
+    }
+
+    .btn {
+        background: none;
+        border: 2px solid #d4a373;
+        padding: 12px 23px;
+        margin: auto;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 30px;
+        transition: 0.4s;
+        text-decoration: none;
+    }
+
+    .signup {
+        background-color: black;
+        border-color: #d4a373;
+        color: white;
+    }
+
+    .signup:hover, .login:hover {
+        background-color: #d4a373;
+        color: white;
+    }
+    .login {
+        background-color: black;
+        border-color: #d4a373;
+        color: white;
+    }
+
+     .login:hover {
+        background-color: #d4a373;
+        color: white;
+    }
+
+    .container {
+    background: black;
+    padding: 20px;
+    border-radius: 10px;
+    width: 600px;
+    margin-top :80px;
+    margin-left: 30%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.upload-box {
+    border: 2px dashed #d4a373;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    background: black;
+    transition: 0.3s;
+}
+
+
+.upload-icon {
+    width: 20px;
+    opacity: 0.5;
+}
+
+.upload-info {
+    font-size: 12px;
+    color: white;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    
+    margin-top: 20px;
+}
+
+.upload-btn {
+    background: none;
+        border: 2px solid #d4a373;
+        padding: 8px 15px;
+        margin: auto;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 30px;
+        transition: 0.4s;
+}
+
+.choose-file {
+    background: #d4a373;
+}
+.choose-file:hover{
+    background-color: black;
+        border-color: #d4a373;
+        color: white;
+}
+
+.paste-btn {
+    background:#d4a373;
+    padding: 8px 20px;
+
+    
+}
+.paste-btn:hover{
+    background-color: black;
+        border-color: #d4a373;
+        color: white;
+}
+
+
+
+.upload-btn:hover {
+    opacity: 0.8;
+}
+
+textarea, input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.submit-btn {
+    background-color: #d4a373;
+        border: 2px solid #d4a373;
+        padding: 8px 10px;
+        margin-top:25px;
+        margin-left: 20px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 30px;
+        transition: 0.4s;
+}
+.submit-btn:hover{
+    background-color: black;
+        border-color: #d4a373;
+        color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid black;
+    background-color: #d4a373;
+    color: white;
+}
+
+.summary {
+    background-color: #d4a373;
+    padding: 40px;
+    padding-bottom: 10px;
+    color: black;
+    width: 700px;
+    border-radius: 20px;
+    justify-content:center;
+    margin-left: 25%;
+}
+
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+.download-btn {
+     display: inline-block;  /* Makes it a block element, placing it on a new line */
+    background-color: #d4a373;
+    border: 2px solid #d4a373;
+    padding: 8px 10px;
+    margin: 10px ; /* Centers and adds space above */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: 0.4s;
+    text-align: center;
+    text-decoration: none;
+}
+
+.download-btn:hover {
+    background-color: black;
+        border-color: #d4a373;
+        color: white;
+}
+.button-container {
+    text-align: center;
+    margin-top: 30px; /* Adds space between summary and button */
+}
+
+.summarization-container {
+    margin-bottom: 20px;
+}
+/* Heatmap Container */
+.heatmap-container {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    padding: 50px;
+}
+
+/* Heatmap Image */
+.heatmap-img {
+    max-width: 100%; /* Ensures it never overflows */
+    height: auto; /* Keeps aspect ratio */
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    .heatmap-container {
+        padding: 10px;
+    }
+
+    .heatmap-img {
+        width: 100%; /* Make it fully stretch on smaller screens */
+    }
+}
+
+/* Floating Chatbot Icon */
+@keyframes pulse {
+    0% { box-shadow: 0 0 10px rgba(196, 154, 108, 0.8); }
+    50% { box-shadow: 0 0 20px rgba(196, 154, 108, 1); }
+    100% { box-shadow: 0 0 10px rgba(196, 154, 108, 0.8); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.chatbot-icon {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #c49a6c;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 28px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    animation: pulse 1.5s infinite alternate, bounce 2s infinite;
+}
+.chatbot-icon.fixed {
+    position: absolute;  /* Changes from fixed to absolute */
+}
+
+/* Stop animation class */
+.stop-animation {
+    animation: none;
+}
+
+.chatbot-icon:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 30px rgba(196, 154, 108, 1);
+}
+
+/* Chat Container */
+.chat-container {
+    position: fixed;
+    bottom: 100px; /* Adjust height above footer */
+    right: 20px;
+    width: 350px;
+    
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    display: none; /* Initially hidden */
+}
+
+/* Chat Header */
+.chat-header {
+    background: #c49a6c;
+    padding: 10px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Close Button */
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Chat Box */
+.chat-box {
+    height: 350px;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 5px;
+}
+
+.bot-message, .user-message {
+    max-width: 75%;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.bot-message {
+    align-self: flex-start;
+    background: #333;
+    color: #fff;
+}
+
+.user-message {
+    align-self: flex-end;
+    background: #c49a6c;
+    color: #fff;
+}
+
+/* Chat Input */
+.chat-input {
+    display: flex;
+    padding: 10px;
+    background: #121212;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: #1f1f1f;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.chat-input button {
+    background: #c49a6c;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.chat-input button:hover {
+    background: #a87d4e;
+}
+/* Floating Chat Icon */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 100px;
+    width: 250px;
+    height: 83vh;
+    background: #c49a6c;
+    color: white;
+    padding: 15px;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+}
+
+.sidebar h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.history-section {
+    margin-bottom: 20px;
+}
+
+.history-section h4 {
+    font-size: 16px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid gray;
+    padding-bottom: 5px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    font-size: 14px;
+    background: #c49a6c ;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    word-wrap: break-word;
+}
+
+/* Ensure main content shifts right */
+.container {
+    margin-left: 30%;
+}
+/* Ensure it moves into view when opened */
+
+/* Responsive Design */
+/* Footer Container */
+.footer {
+    background-color: black;
+    padding: 40px 60px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-left: 300px;
+}
+
+.footer-logo {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align all items */
+}
+
+.footer-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between logo and text */
+}
+
+.footer-logo img {
+    width: 70px;
+}
+
+.footer-logo h2 {
+    font-size: 25px;
+    color: white;
+    margin: 0;
+}
+
+/* Social icons centered below the logo and text */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    justify-content: left;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 23px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #c09b75;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    max-width: 600px;
+}
+
+.footer-column {
+    margin-right: 20px;
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.footer-column a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.footer-column a:hover {
+    color: #d4a373;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+    background: black;
+    margin-top: 1px;
+}
+
+.footer-bottom a {
+    text-decoration: none;
+    color: white;
+    margin-left: 10px;
+}
+.contact-list li {
+    font-size: 14px;
+    display: flex;
+}
+@media (max-width: 600px) {
+    .btn, .discover-btn, .try-summarizer {
+        width: 30%;
+        font-size: 14px;
+        padding: 12px ;
+        margin-top: 10px;
+        
+    }
+}
+@media (max-width: 768px) {
+    .auth-buttons {
+        flex-direction: row; /* Stack buttons on smaller screens */
+        gap: 5px;
+        width: 100%;
+        text-align: center;
+    }
+
+   
+}
+@media (max-width: 1024px) {
+    .container {
+        width: 80%;
+        margin: 100px auto;
+        
+    }
+
+    .summary {
+        width: 80%;
+        margin: 60px auto;
+        padding: 30px;
+    }
+
+    .chat-container {
+        width: 85%;
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 50%;
+        margin-right: 50px;
+    }
+
+    .summary {
+        width: 70%;
+        padding: 25px;
+    }
+
+    .upload-btn,
+    .paste-btn,
+    .submit-btn,
+    .download-btn {
+        width: 30%;
+        text-align: center;
+        margin: 5px 0;
+    }
+
+    .options {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chat-container {
+        width: 90%;
+        max-width: 320px;
+    }
+
+    .chatbot-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+}
+@media screen and (max-width: 1024px) {
+    .container {
+        width: 80%;
+    }
+    .summary {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 70%;
+        margin-top: 50px;
+    }
+    .summary {
+        width: 70%;
+    }
+    .options {
+        flex-direction: column;
+        align-items: center;
+    }
+    .upload-btn {
+        width: 30%;
+        
+    }
+    .submit-btn {
+        width: 30%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        width: 75%;
+        margin-top: 40px;
+    }
+    .summary {
+        width: 75%;
+        margin-top: 40px;
+        padding: 10px;
+        
+    }
+    .upload-box {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 60%;
+        margin: 40px auto;
+        padding: 10px;
+    }
+
+    .summary {
+        width: 60%;
+        padding: 10px;
+    }
+
+    .chat-container {
+        width: 95%;
+        max-width: 300px;
+    }
+
+    .chat-header {
+        font-size: 16px;
+    }
+
+    .chatbot-icon {
+        bottom: 60px;
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+
+    .chat-box {
+        height: 350px;
+    }
+}
+@media screen and (max-width: 768px) { /* Mobile */
+    .sidebar {
+        width: 100px;
+        padding: 10px;
+    }
+    .sidebar h3 {
+        font-size: 14px;
+    }
+    .history-section h4 {
+        font-size: 12px;
+    }
+    .sidebar ul li {
+        font-size: 12px;
+        padding: 8px;
+    }
+    .container {
+        margin-left: 120px;
+    }
+}
+
+@media screen and (max-width: 480px) { /* Small mobile screens */
+    .sidebar {
+        width: 80px;
+        padding: 5px;
+    }
+    .sidebar h3 {
+        font-size: 12px;
+    }
+    .history-section h4 {
+        font-size: 10px;
+    }
+    .sidebar ul li {
+        font-size: 10px;
+        padding: 6px;
+    }
+    .container {
+        margin-left: 100px;
+    }
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footer {
+        flex-direction: column; /* Stack items vertically */
+        text-align: center;
+        padding: 30px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-column {
+        margin-bottom: 20px;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        font-size: 12px;
+    }
+}
+
+
+</style>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Lawsumm logo">
+                <strong>LawSumm</strong>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}" class="active">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('summarization') }}">Summarization</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+
+            </ul>
+            <div class="auth-buttons">
+                <a href="{{ url_for('login') }}" class="btn login">LogIn</a>
+    <a href="{{ url_for('signup') }}" class="btn signup">SignUp</a>
+            </div>
+            
+            
+            <div class="menu-toggle">&#9776;</div>
+        </nav>
+    </header>
+    <div class="container">
+        <form id="uploadForm" action="/" method="post" enctype="multipart/form-data">
+            <div class="upload-box" id="dropArea">
+                <img src="{{ url_for('static', filename='cloud.png') }}" alt="Example Image">
+
+                <p><strong>DRAG & DROP A FILE*</strong>,</p>
+                <p>paste text or choose an option below</p>
+                
+                
+                <!-- File Input inside Form -->
+                <input type="file" id="fileInput" name="file" hidden>
+            </div>
+    
+            <div class="options">
+                <label for="fileInput" class="upload-btn choose-file">📁 CHOOSE FILE</label>
+                <button type="button" class="upload-btn paste-btn" id="pasteBtn">📋 PASTE</button>
+                
+            </div>
+    
+            <!-- Hidden Textarea for Paste Option -->
+            <textarea id="pasteText" name="pasteText" placeholder="Paste text here..." class="hidden"></textarea>
+    
+            
+            
+    
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn hidden">Summarize</button>
+        </form>
+    </div>
+
+       
+
+        {% if summary %}
+        <h2>Generated Summary</h2>
+        <div class="summary">{{ summary|safe }}</div>
+        <div class="button-container">
+            <a href="{{ url_for('download_summary') }}" class="download-btn">Download Summary</a>
+        </div>
+    {% endif %}
+    {% if heatmap_url %}
+    <h2>Sentence Importance Heatmap</h2>
+    <div class="heatmap-container">
+        <img src="{{ heatmap_url }}" alt="Sentence Importance Heatmap" class="heatmap-img">
+    </div>
+{% endif %}
+
+<!-- Floating Chatbot Icon -->
+<div class="chatbot-icon" onclick="toggleChat()">
+    <i class="fa fa-question"></i>
+</div>
+
+<!-- Chatbot Container -->
+<div class="chat-container" id="chatContainer">
+    <div class="chat-header">
+        <h2>Legal AI Assistant</h2>
+        <button class="close-btn" onclick="toggleChat()">&times;</button>
+    </div>
+    <div class="chat-box" id="chatBox">
+        <div class="bot-message">
+            <p>Hello! How can I assist you today?😊</p>
+        </div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Type a message..." autofocus>
+        <button onclick="sendMessage()"><i class="fa fa-paper-plane"></i></button>
+    </div>
+</div>
+<div class="sidebar">
+    <h3>History</h3>
+    
+    <!-- Last Summaries -->
+    <div class="history-section">
+        <h4>Last 2 Summaries</h4>
+        <ul id="summaryHistory"></ul>
+    </div>
+    
+    <!-- Last Chats -->
+    <div class="history-section">
+        <h4>Last 2 Chats</h4>
+        <ul id="chatHistory"></ul>
+    </div>
+</div>
+    
+    <footer class="footer">
+        <div class="footer-logo">
+            <div class="footer-logo-container">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Lawsumm logo">
+                <h2>LawSumm</h2>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#"><i class="fa-brands fa-discord"></i></a>
+            </div>
+        </div>
+        
+        <div class="footer-links">
+            <div class="footer-column">
+                <h3>About</h3>
+                <a href="{{ url_for('about') }}">Why Lawsumm</a>
+                <a href="{{ url_for('home') }}">Legal Library</a>
+                <a href="{{ url_for('about') }}">Team</a>
+                <a href="{{ url_for('home') }}">FAQs</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Product</h3>
+                <a href="{{ url_for('summarization') }}">summarizer</a>
+                <a href="{{ url_for('summarization') }}">Legal Chatbot</a>
+                <a href="Terms and Conditions.pdf">Privacy Policy</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Get Started</h3>
+                <a href="{{ url_for('login') }}">LogIn</a>
+                <a href="{{ url_for('signup') }}">SignUp</a>
+                <a href="{{ url_for('contact') }}">Contact Us</a>
+                
+            </div>
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <p style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-envelope"></i>
+                    <a href="mailto:legaldocumentai@gmail.com">
+                        legaldocumentai@gmail.com
+                    </a>
+                </p>
+                <p style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-phone"></i>
+                    
+                    +92 337 55498762
+                </p>
+            </div>
+
+            
+
+        </div>
+    </footer>
+
+    <div class="footer-bottom">
+        © 2025 LawSumm by OthersideAI. All rights reserved.
+        <a href="{{ url_for('serve_pdf', filename='Terms and Conditions.pdf') }}" target="_blank">
+            Privacy Policy
+        </a> 
+        |
+        <a href="{{ url_for('serve_pdf', filename='Terms and Conditions.pdf') }}" target="_blank">
+            Terms
+        </a>
+    </div>
+
+    
+
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    menuToggle.addEventListener("click", function() {
+        navLinks.classList.toggle("show");
+    });
+});
+
+
+
+    function redirectToLogin() {
+        window.location.href = "loginpage.html"; // Redirects to the login page
+    }
+
+    function redirectToSignup() {
+        window.location.href = "signuppage.html"; // Redirects to the signup page
+    }
+    function redirectToaboutpage(){
+    window.location.href = "aboutpage.html";
+    }
+    function redirectTomainpage(){
+        window.location.href = "summerization-app\templates\mainscreen.html";
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+    let dropArea = document.getElementById("dropArea");
+    let fileInput = document.getElementById("fileInput");
+    let pasteBtn = document.getElementById("pasteBtn");
+    let urlBtn = document.getElementById("urlBtn");
+    let pasteText = document.getElementById("pasteText");
+    let urlInput = document.getElementById("urlInput");
+    let submitBtn = document.querySelector(".submit-btn");
+
+    // Handle file drag over
+    dropArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropArea.style.background = "#black";
+    });
+
+    dropArea.addEventListener("dragleave", () => {
+        dropArea.style.background = "black";
+    });
+
+    dropArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropArea.style.background = " #333";
+        let files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            submitBtn.classList.remove("hidden");
+        }
+    });
+
+    // Show textarea on paste button click
+    pasteBtn.addEventListener("click", () => {
+        pasteText.classList.toggle("hidden");
+        submitBtn.classList.toggle("hidden");
+    });
+
+   
+
+    // Show submit button when file is chosen
+    fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+            submitBtn.classList.remove("hidden");
+        }
+    });
+});
+function toggleChat() {
+    var chatContainer = document.getElementById("chatContainer");
+    if (chatContainer.style.display === "none" || chatContainer.style.display === "") {
+        chatContainer.style.display = "block"; // Show chatbot
+    } else {
+        chatContainer.style.display = "none"; // Hide chatbot
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const chatbotIcon = document.querySelector(".chatbot-icon");
+    const footer = document.querySelector("footer"); // Ensure you have a <footer> tag in your HTML
+
+    function checkFooter() {
+        const footerTop = footer.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        if (footerTop < windowHeight) {
+            chatbotIcon.classList.add("fixed");
+            chatbotIcon.style.bottom = (windowHeight - footerTop + 20) + "px"; // Adjust icon position
+        } else {
+            chatbotIcon.classList.remove("fixed");
+            chatbotIcon.style.bottom = "30px"; // Reset to original position
+        }
+    }
+
+    // Stop animation when clicked
+    chatbotIcon.addEventListener("click", function () {
+        chatbotIcon.classList.add("stop-animation");
+    });
+
+    window.addEventListener("scroll", checkFooter);
+});
+
+const chatBox = document.getElementById('chatBox');
+const userInput = document.getElementById('userInput');
+
+function sendMessage() {
+    let userText = userInput.value.trim();
+    if (userText === "") return;
+
+    // Display User Message
+    let userMessage = document.createElement('div');
+    userMessage.classList.add('user-message');
+    userMessage.innerHTML = `<p>${userText}</p>`;
+    chatBox.appendChild(userMessage);
+
+    // Clear Input
+    userInput.value = "";
+
+    // Auto Scroll
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Bot Response (Fake AI)
+    setTimeout(() => botReply(userText), 1000);
+}
+
+function botReply(userText) {
+    let botMessage = document.createElement('div');
+    botMessage.classList.add('bot-message');
+
+    let reply = getBotResponse(userText);
+    botMessage.innerHTML = `<p>${reply}</p>`;
+    
+    chatBox.appendChild(botMessage);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Simple AI Responses
+function getBotResponse(input) {
+    input = input.toLowerCase();
+
+    if (input.includes("hello")) return "Hello! How can I help you? 😊";
+    if (input.includes("your name")) return "I'm a friendly chatbot!";
+    if (input.includes("how are you")) return "I'm just a bot, but I'm doing great! How about you?";
+    if (input.includes("help")) return "Sure! Tell me what you need help with.";
+    
+    return "Sorry, I didn't understand that. Can you rephrase?";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    loadHistory(); // Load history when page loads
+});
+
+// Function to store summaries in history
+function storeSummary(summary) {
+    let summaries = JSON.parse(localStorage.getItem("summaries")) || [];
+    summaries.unshift(summary); // Add new summary at the start
+    summaries = summaries.slice(0, 2); // Keep only last 2 summaries
+    localStorage.setItem("summaries", JSON.stringify(summaries));
+    loadHistory();
+}
+
+// Function to store chat messages in history
+function storeChatMessage(message) {
+    let chats = JSON.parse(localStorage.getItem("chats")) || [];
+    chats.unshift(message);
+    chats = chats.slice(0, 2); // Keep only last 2 chats
+    localStorage.setItem("chats", JSON.stringify(chats));
+    loadHistory();
+}
+
+// Function to load history into sidebar
+function loadHistory() {
+    let summaries = JSON.parse(localStorage.getItem("summaries")) || [];
+    let chats = JSON.parse(localStorage.getItem("chats")) || [];
+
+    let summaryList = document.getElementById("summaryHistory");
+    let chatList = document.getElementById("chatHistory");
+
+    summaryList.innerHTML = summaries.map(s => `<li>${s}</li>`).join("");
+    chatList.innerHTML = chats.map(c => `<li>${c}</li>`).join("");
+}
+
+// Intercept form submission for summarization
+document.getElementById("uploadForm")?.addEventListener("submit", function (event) {
+    let summaryText = document.querySelector(".summary")?.innerText;
+    if (summaryText) {
+        storeSummary(summaryText);
+    }
+});
+
+// Handle chat submission
+function sendMessage() {
+    let userInput = document.getElementById("userInput").value.trim();
+    if (userInput) {
+        storeChatMessage(userInput);
+        let chatBox = document.getElementById("chatBox");
+        chatBox.innerHTML += `<div class='user-message'><p>${userInput}</p></div>`;
+        document.getElementById("userInput").value = "";
+    }
+}
+
+
+
+
+   
+</script>
+</html>
