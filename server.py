@@ -59,6 +59,14 @@ def highlight_keywords(text):
         'section': r'\bSection\s\d{1,3}[-A-Za-z]?\(?[a-zA-Z]?\)?\b',
         'date': r'\b(?:[A-Za-z]+)\s\d{4}\b|\b\d{1,2}[-/]\d{1,2}[-/]\d{2,4}\b',
         'persons': r'\b([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)\b',
+        'ordinance': r'\b([A-Z][a-z\s]+Ordinance(?:,\s\d{4})?)\b',  # Example: PEMRA Ordinance, 2002
+        'petition': r'\b(?:[A-Za-z\s]*Petition\sNo\.\s\d+/\d{4})\b',  # Example: Constitutional Petition No. 123/2024
+        'act_with_year': r'\b([A-Za-z\s]+(?:\sAct(?:\s\d{4})?)),\s*(\d{4})\b',  # Example: Control of Narcotic Substances Act, 1997
+        'article': r'\b(Article\s\d{1,3}(-[A-Z])?)\b',  # Example: Article 10-A
+        'section': r'\b(Section\s\d{1,3}(\([a-zA-Z0-9]+\))?)\b',  # Example: Section 302(b), Section 9(c), Section 144-A
+        'date': r'\b(?:\d{1,2}[-/]\d{1,2}[-/]\d{2,4}|\d{4}|\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2},?\s\d{4})\b',  
+        # Examples: 15/07/2015, July 2015, March 5, 2021, 2023
+        'person': r'\b([A-Z][a-z]+(?:\s[A-Z][a-z]+)+)\b'  # Example: Justice Ali Raza
     }
 
     highlighted_text = text
